@@ -20,6 +20,7 @@ import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -39,7 +40,7 @@ public class Insert_Article_Activity extends AppCompatActivity {
     DbHelper dbHelper;
     SQLiteDatabase sqLiteDatabase;
     Button savebtn;
-    EditText etTitle, etDescription;
+    EditText etTitle, etDescription, etBloggerName;
     ImageView articleImage;
     ModelClass modelClass;
     int id = 0;
@@ -48,6 +49,7 @@ public class Insert_Article_Activity extends AppCompatActivity {
     public static final int STORAGE_REQUEST = 101;
     String[] cameraPremission;
     String[] storagePermission;
+    private boolean imageIsSelected=false;
 
 
     @Override
@@ -65,30 +67,45 @@ public class Insert_Article_Activity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                modelClass = new ModelClass();
-                modelClass.setArticle_Description(etDescription.getText().toString());
-                modelClass.setArticle_Title(etTitle.getText().toString());
-                ContentValues cv = new ContentValues();
 
-                //cv.put(COLUMN_PERSON_NAME, modelClass.getName());
-                cv.put(COLUMN_BLOGGER_NAME, modelClass.getBlogger_name());
-                cv.put(COLUMN_ARTICLE_DESCRIPTION, modelClass.getArticle_Description());
-                cv.put(COLUMN_ARTICLE_TITLE, modelClass.getArticle_Title());
-                cv.put(COLUMN_ARTICLE_DATE, modelClass.getArticle_Date());
-                cv.put(COLUMN_ARTICLE_PICTURE, ImageViewToByte(articleImage));
-                sqLiteDatabase = dbHelper.getWritableDatabase();
-                long insert = sqLiteDatabase.insert(TABLENAME, null, cv);
+                String bloggerName = etBloggerName.getText().toString();
+                String articleDes = etDescription.getText().toString();
+                String articleTitle = etTitle.getText().toString();
 
-                if (insert == -1) {
-                    Toast.makeText(Insert_Article_Activity.this, "record  not inserted", Toast.LENGTH_SHORT).show();
 
+                if (!imageIsSelected||bloggerName.isEmpty() || articleDes.isEmpty() || articleTitle.isEmpty()) {
+                    Toast.makeText(Insert_Article_Activity.this, " No Image Selected or some fields missing ", Toast.LENGTH_SHORT).show();
                 } else {
+                    //Toast.makeText(Insert_Article_Activity.this, "No image found", Toast.LENGTH_SHORT).show();
 
-                    Toast.makeText(Insert_Article_Activity.this, "record  inserted", Toast.LENGTH_SHORT).show();
-                    finish();
+                    modelClass = new ModelClass();
+                    modelClass.setBlogger_name(etBloggerName.getText().toString());
+                    modelClass.setArticle_Description(etDescription.getText().toString());
+                    modelClass.setArticle_Title(etTitle.getText().toString());
+                    ContentValues cv = new ContentValues();
+
+                    //cv.put(COLUMN_PERSON_NAME, modelClass.getName());
+                    cv.put(COLUMN_BLOGGER_NAME, modelClass.getBlogger_name());
+                    cv.put(COLUMN_ARTICLE_DESCRIPTION, modelClass.getArticle_Description());
+                    cv.put(COLUMN_ARTICLE_TITLE, modelClass.getArticle_Title());
+                    cv.put(COLUMN_ARTICLE_DATE, modelClass.getArticle_Date());
+                    cv.put(COLUMN_ARTICLE_PICTURE, ImageViewToByte(articleImage));
+                    sqLiteDatabase = dbHelper.getWritableDatabase();
+                    long insert = sqLiteDatabase.insert(TABLENAME, null, cv);
+
+                    if (insert == -1) {
+                        Toast.makeText(Insert_Article_Activity.this, "record  not inserted", Toast.LENGTH_SHORT).show();
+
+                    } else {
+
+                        Toast.makeText(Insert_Article_Activity.this, "record  inserted", Toast.LENGTH_SHORT).show();
+                        finish();
 //                    avatar.setImageResource(R.mipmap.ic_launcher);
 //                    name.setText("");
+                    }
                 }
+
+
             }
         });
         //image
@@ -160,6 +177,7 @@ public class Insert_Article_Activity extends AppCompatActivity {
     }
 
     public void init() {
+        etBloggerName = findViewById(R.id.edittext_blogger_name);
         articleImage = findViewById(R.id.imageview_article_image);
         etTitle = findViewById(R.id.edittext_title);
         etDescription = findViewById(R.id.edittext_description);
@@ -205,9 +223,11 @@ public class Insert_Article_Activity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 Uri resultUri = result.getUri();
                 Picasso.with(this).load(resultUri).into(articleImage);
+                imageIsSelected=true;
             }
         }
     }
+
     // picture related functions end
 
 }
