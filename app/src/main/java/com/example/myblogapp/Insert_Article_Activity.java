@@ -15,6 +15,7 @@ import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
@@ -44,12 +45,13 @@ public class Insert_Article_Activity extends AppCompatActivity {
     ImageView articleImage;
     ModelClass modelClass;
     int id = 0;
+    Context context;
 
     public static final int CAMERA_REQUEST = 100;
     public static final int STORAGE_REQUEST = 101;
     String[] cameraPremission;
     String[] storagePermission;
-    private boolean imageIsSelected=false;
+    private boolean imageIsSelected = false;
 
 
     @Override
@@ -73,7 +75,7 @@ public class Insert_Article_Activity extends AppCompatActivity {
                 String articleTitle = etTitle.getText().toString();
 
 
-                if (!imageIsSelected||bloggerName.isEmpty() || articleDes.isEmpty() || articleTitle.isEmpty()) {
+                if (!imageIsSelected || bloggerName.isEmpty() || articleDes.isEmpty() || articleTitle.isEmpty()) {
                     Toast.makeText(Insert_Article_Activity.this, " No Image Selected or some fields missing ", Toast.LENGTH_SHORT).show();
                 } else {
                     //Toast.makeText(Insert_Article_Activity.this, "No image found", Toast.LENGTH_SHORT).show();
@@ -223,7 +225,7 @@ public class Insert_Article_Activity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 Uri resultUri = result.getUri();
                 Picasso.with(this).load(resultUri).into(articleImage);
-                imageIsSelected=true;
+                imageIsSelected = true;
             }
         }
     }

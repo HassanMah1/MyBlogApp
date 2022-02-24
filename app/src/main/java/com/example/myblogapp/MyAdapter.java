@@ -1,9 +1,11 @@
 package com.example.myblogapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +48,21 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
         holder.tv_date.setText(DateUtils.getStringDate(article_data.getArticle_Date()));
         holder.tv_description.setText(article_data.getArticle_Description() );
         holder.art_image.setImageBitmap(bitmap);
+        holder.art_image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle bundle = new Bundle();
+                bundle.putInt("id", article_data.getId());
+                bundle.putString("articleTitle", article_data.getArticle_Title());
+                bundle.putLong("articleDate", article_data.getArticle_Date());
+                bundle.putByteArray("avatar", article_data.getArticle_Picture());
+                bundle.putString("articleDesc", article_data.getArticle_Description());
+//                        bundle.putString("name", modelClass.getUsername());
+                Intent it = new Intent(context, DetailedArticleActivity.class);
+                it.putExtra("userdata", bundle);
+                context.startActivity(it);
+            }
+        });
 
     }
 
