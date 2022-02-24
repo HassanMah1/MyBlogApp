@@ -23,8 +23,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -41,7 +39,7 @@ public class Insert_Article_Activity extends AppCompatActivity {
     DbHelper dbHelper;
     SQLiteDatabase sqLiteDatabase;
     Button savebtn;
-    EditText et_title, et_description;
+    EditText etTitle, etDescription;
     ImageView articleImage;
     ModelClass modelClass;
     int id = 0;
@@ -66,7 +64,10 @@ public class Insert_Article_Activity extends AppCompatActivity {
         savebtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 modelClass = new ModelClass();
+                modelClass.setArticle_Description(etDescription.getText().toString());
+                modelClass.setArticle_Title(etTitle.getText().toString());
                 ContentValues cv = new ContentValues();
 
                 //cv.put(COLUMN_PERSON_NAME, modelClass.getName());
@@ -160,8 +161,8 @@ public class Insert_Article_Activity extends AppCompatActivity {
 
     public void init() {
         articleImage = findViewById(R.id.imageview_article_image);
-        et_title = findViewById(R.id.edittext_title);
-        et_description = findViewById(R.id.edittext_description);
+        etTitle = findViewById(R.id.edittext_title);
+        etDescription = findViewById(R.id.edittext_description);
         savebtn = findViewById(R.id.save_button);
 
     }
