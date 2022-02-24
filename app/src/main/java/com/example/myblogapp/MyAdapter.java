@@ -39,6 +39,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
     public void onBindViewHolder(@NonNull MyHolder holder, int position) {
         ModelClass article_data = modelArrayList.get(position);
         byte[] image = article_data.getArticle_Picture();
+        //
         Bitmap bitmap = BitmapFactory.decodeByteArray(image, 0, image.length);
 //        holder.tv_date.setText(article_data.getArticle_Date()+"");
         holder.tv_delete.setText("delete");
